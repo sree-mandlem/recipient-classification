@@ -27,3 +27,7 @@ p {
     margin: 10px 0;
     color: #ccc;
 }
+
+.card-text {
+    color: #000;
+}

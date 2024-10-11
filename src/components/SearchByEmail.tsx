@@ -81,7 +81,7 @@ const SearchByEmail: React.FC = () => {
                                 <Form.Label htmlFor="email" className={isFocused['emails'] ? 'focused' : ''}>Enter email
                                     to search</Form.Label>
                                 <Button variant="primary" onClick={handleSearch}>
-                                    Search
+                                    {loading? 'Searching...' : 'Search'}
                                 </Button>
                             </InputGroup>
                         </Form.Group>

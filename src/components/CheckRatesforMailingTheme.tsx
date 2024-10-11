@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button, Table, InputGroup , Badge } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 import "./CheckRatesforMailingTheme.css";
 import {useAppContext} from "../AppContext";
 
 interface FormData {
     emails: string[];
     mailingName: string;
-    profileCategory?: string | null;
     mailingGroupId: string;
 }
 
 interface ResultData {
-    emails: {
-        [category: string]: Array<{
-            email: string;
-            categoryRate: number;
-            commonRate: number;
-        }>;
-    };
+    mailingCategory: string;
+    emails: Array<{
+        email: string;
+        categoryRate: number;
+        commonRate: number;
+        engagementType: String
+    }>;
 }
 
 const CheckRatesforMailingTheme: React.FC = () => {
@@ -29,7 +28,6 @@ const CheckRatesforMailingTheme: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
         emails: [],
         mailingName: '',
-        profileCategory: '',
         mailingGroupId: ''
     });
 
@@ -59,7 +57,6 @@ const CheckRatesforMailingTheme: React.FC = () => {
         const requestBody: FormData = {
             emails: emails,
             mailingName: formData.mailingName,
-            profileCategory: formData.profileCategory || null, // Can be nullable
             mailingGroupId: mailingGroupId || "12345" // From context
         };
 
@@ -88,11 +85,11 @@ const CheckRatesforMailingTheme: React.FC = () => {
         }
     };
 
-    const renderEngagementText = (email: string, entry: any, aiCategory: string) => {
-        if (entry) {
-            return `${email} - ${aiCategory} category opening rate ${entry.categoryRate} (patron), overall opening rate ${entry.commonRate} (patron)`;
+    const renderEngagementText = (email: string, entry: any, mailingCategory: string) => {
+        if (entry.categoryRate === 0) {
+            return `For this category the user has no prior engagement to categorize, but has a overall rate ${entry.commonRate}`;
         } else {
-            return `${email} - not found`;
+            return `For the category [${mailingCategory}] the user is categorized as a [${entry.engagementType}] with specific category rate ${entry.categoryRate} and overall rate ${entry.commonRate}`;
         }
     };
 
@@ -100,19 +97,12 @@ const CheckRatesforMailingTheme: React.FC = () => {
         if (!resultData) return null;
 
         // Assume "Holidays" is the AI-defined category (could be dynamic in future)
-        const aiCategory = "Holidays";
-
-        // Extract all emails for each category
-        const patronsEmails = resultData.emails.patrons || [];
-        const casualsEmails = resultData.emails.casuals || [];
-        const disengagedEmails = resultData.emails.disengaged || [];
-        const naEmails = resultData.emails.na || [];
-        const noEmails = resultData.emails.no || [];
+        const mailingCategory = resultData.mailingCategory;
 
         return (
             <div>
                 <h3>Result</h3>
-                <h4>Category defined by AI: {aiCategory}</h4>
+                <h4>Category defined by AI: {mailingCategory}</h4>
 
                 <Table striped bordered hover>
                     <thead>
@@ -123,23 +113,13 @@ const CheckRatesforMailingTheme: React.FC = () => {
                     </thead>
                     <tbody>
                     {emails.map((email, index) => {
-                        const patronEntry = patronsEmails.find(item => item.email === email);
-                        const casualEntry = casualsEmails.find(item => item.email === email);
-                        const disengagedEntry = disengagedEmails.find(item => item.email === email);
-                        const naEntry = naEmails.find(item => item.email === email);
-                        const noEntry = noEmails.find(item => item.email === email);
+                        const entry = resultData.emails.find(item => item.email === email);
 
-                        let engagementText = "";
-                        if (patronEntry) {
-                            engagementText = renderEngagementText(email, patronEntry, aiCategory);
-                        } else if (casualEntry) {
-                            engagementText = renderEngagementText(email, casualEntry, aiCategory);
-                        } else if (disengagedEntry) {
-                            engagementText = renderEngagementText(email, disengagedEntry, aiCategory);
-                        } else if (naEntry) {
-                            engagementText = `${email} - not found for category ${aiCategory}, overall opening rate ${naEntry.commonRate} (patron)`;
-                        } else if (noEntry) {
-                            engagementText = `${email} - not found`;
+                        let engagementText;
+                        if (entry) {
+                            engagementText = renderEngagementText(email, entry, mailingCategory);
+                        } else {
+                            engagementText = `Email not found`;
                         }
 
                         return (
@@ -161,18 +141,6 @@ const CheckRatesforMailingTheme: React.FC = () => {
             <Row className="form-section">
                 <Col>
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="profileCategory" className="form-group">
-                            <Form.Control
-                                type="text"
-                                id="profileCategory"
-                                value={formData.profileCategory || ''}
-                                onFocus={() => handleFocus('profileCategory')}
-                                onBlur={() => handleBlur('profileCategory')}
-                                onChange={(e) => setFormData({ ...formData, profileCategory: e.target.value })}
-                                placeholder={''}
-                            />
-                            <Form.Label htmlFor="profileCategory" className={isFocused['profileCategory'] ? 'focused' : ''}>Profile Category</Form.Label>
-                        </Form.Group>
                         <Form.Group controlId="mailingName" className="form-group">
                             <Form.Control
                                 type="text"
@@ -196,11 +164,13 @@ const CheckRatesforMailingTheme: React.FC = () => {
                             <Form.Label>Emails</Form.Label>
                         </Form.Group>
                         <Button variant="primary" type="submit">
-                            Submit
+                            {loading? 'Loading...' : 'Submit'}
                         </Button>
                     </Form>
                 </Col>
             </Row>
+
+            {error && <p style={{ color: 'red' }}>{error}</p>}
 
             {/* Results Section */}
             {resultData && (
