@@ -1,0 +1,72 @@
+/* Custom Header Styling */
+.custom-header {
+    height: 200px;
+    background: linear-gradient(45deg, #00aaff, #002df7, #00ff99);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+/* Main header content layout */
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    position: relative;
+    z-index: 1; /* To ensure it stays above background patterns */
+}
+/* Left Section Styling */
+.header-left {
+    display: flex;
+    align-items: center;
+}
+.icon-box {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+.icon {
+    width: 50px;
+    height: 50px;
+    color: white;
+    font-size: 24px;
+    background-image: url('../../public/logo.svg'), none;
+}
+.text-content h1 {
+    color: white;
+    font-size: 1.8rem;
+    margin: 0;
+}
+.divider {
+    width: 2px;
+    height: 100px;
+    background-color: white;
+    margin: 0 20px;
+}
+/* Right Section Styling */
+.header-right h1 {
+    color: white;
+    font-size: 1.8rem;
+    margin: 0;
+}
+.site-header {
+    height: 100px;
+    background: linear-gradient(45deg, #0062ff, #41f170);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    font-size: 24px;
+    font-family: 'Figtree', sans-serif;
+    box-shadow: 0 4px 2px -2px gray;
+}
+.header {
+    color: white;
+}

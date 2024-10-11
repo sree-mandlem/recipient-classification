@@ -36,3 +36,95 @@
     transform: rotate(360deg);
   }
 }
+
+/* Container for form input field */
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* The input field */
+.form-control {
+  background-color: #0d0f15; /* Dark background */
+  border: 1px solid #2c313f; /* Neutral border */
+  color: #c5c6c7; /* Light text color */
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+/* Label styling */
+.form-group label {
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  color: #8a8d91; /* Light gray color for label */
+  font-size: 16px;
+  pointer-events: none; /* Prevent interaction with the label */
+  transition: all 0.3s ease; /* Smooth transition for movement */
+}
+
+/* Focused input field styles */
+.form-control:focus {
+  border-color: #00ffff; /* Cyan border */
+  box-shadow: 0 0 10px 2px rgba(0, 255, 255, 0.7); /* Glowing effect */
+}
+
+/* Move the label up when input is focused or contains text */
+.form-control:focus + label,
+.form-control:not(:placeholder-shown) + label {
+  top: -12px;
+  left: 10px;
+  font-size: 12px;
+  background-color: #0d0f15; /* Background color behind the label */
+  padding: 0 5px; /* Padding around the label */
+}
+
+/* Optional: Add transition and style when the form is in an invalid state */
+.form-control:invalid {
+  border-color: #ff4d4f; /* Red border when invalid */
+  box-shadow: none;
+}
+
+/* Container for the email tags */
+.email-tags {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Styling for individual email tags */
+.email-tag {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #1e90ff; /* Change this color as needed */
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+/* Remove button inside each tag */
+.email-remove-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  margin-left: 10px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.email-remove-btn:hover {
+  color: #ff4d4f; /* Color on hover */
+}
+
+/* For the asterisk (*) to make it distinct */
+label sup {
+  color: #ff4d4f; /* Red color for the required symbol */
+  font-size: 12px;
+}

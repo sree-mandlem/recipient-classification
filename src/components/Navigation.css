@@ -1,0 +1,9 @@
+.nav-tabs {
+    margin-bottom: 20px;
+}
+
+.profile-info {
+    font-size: 14px;
+    color: white; /* Set the text color to white */
+    font-weight: 500;
+}
